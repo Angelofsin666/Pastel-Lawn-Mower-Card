@@ -5,9 +5,6 @@
 const { LitElement, html, css } = await import(
   "https://unpkg.com/lit-element@2/lit-element.js?module"
 );
-const { unsafeHTML } = await import(
-  "https://unpkg.com/lit-html@1/directives/unsafe-html.js?module"
-);
 
 // ----------------------------------------------------------------------------
 // Color palette (same set as the other Pastel cards, for consistency)
@@ -54,42 +51,10 @@ function activityLabel(state) {
 }
 
 // ----------------------------------------------------------------------------
-// Robot mower illustration — static, faithful to the reference design
-// (rounded body, headlight strip, friendly face, wheels). No animation,
-// matching the request to keep this card visually still.
+// Default illustration shipped with this card (HACS asset, see README).
+// Configurable per-card via `image_url` for reuse with a different mower.
 // ----------------------------------------------------------------------------
-function mowerSvg(colors) {
-  const body = colors.base;
-  const bodyLight = colors.light;
-  const bodyBg = colors.bg;
-
-  return `
-    <svg width="170" height="140" viewBox="0 0 170 140" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="85" cy="120" rx="60" ry="8" fill="${bodyBg}"/>
-
-      <rect x="20" y="100" width="14" height="16" rx="6" fill="#2a2a2a" opacity="0.75"/>
-      <rect x="136" y="100" width="14" height="16" rx="6" fill="#2a2a2a" opacity="0.75"/>
-
-      <path d="M20 50 C20 28 40 16 85 16 C130 16 150 28 150 50 L150 92 C150 104 138 110 124 110 L46 110 C32 110 20 104 20 92 Z"
-            fill="${body}" stroke="${colors.text}" stroke-width="1.5"/>
-
-      <path d="M30 52 C30 36 48 26 85 26 C122 26 140 36 140 52 L140 64 L30 64 Z"
-            fill="${bodyLight}" opacity="0.55"/>
-
-      <rect x="46" y="40" width="78" height="10" rx="5" fill="#1f2430"/>
-      <rect x="50" y="42" width="20" height="6" rx="3" fill="#ffd966"/>
-      <rect x="100" y="42" width="20" height="6" rx="3" fill="#ffd966"/>
-
-      <circle cx="62" cy="84" r="7" fill="#ffffff"/>
-      <circle cx="62" cy="84" r="3" fill="#2a2a2a"/>
-      <circle cx="108" cy="84" r="7" fill="#ffffff"/>
-      <circle cx="108" cy="84" r="3" fill="#2a2a2a"/>
-      <path d="M70 98 Q85 106 100 98" fill="none" stroke="#2a2a2a" stroke-width="2.5" stroke-linecap="round"/>
-
-      <rect x="16" y="58" width="10" height="34" rx="5" fill="${colors.text}" opacity="0.85"/>
-      <rect x="144" y="58" width="10" height="34" rx="5" fill="${colors.text}" opacity="0.85"/>
-    </svg>`;
-}
+const DEFAULT_IMAGE_URL = "/hacsfiles/pastel-lawn-mower-card/lawn-mower-romario.png";
 
 // ----------------------------------------------------------------------------
 // Card
@@ -106,6 +71,7 @@ class PastelLawnMowerCard extends LitElement {
       subtitle: "Robot tagliaerba",
       icon: "mdi:robot-mower",
       color: "green",
+      image_url: DEFAULT_IMAGE_URL,
       mower_entity: "",
       battery_entity: "",
       area_entity: "",
@@ -123,6 +89,7 @@ class PastelLawnMowerCard extends LitElement {
       subtitle: config.subtitle || "",
       icon: config.icon || "mdi:robot-mower",
       color: PALETTE_KEYS.includes(config.color) ? config.color : "green",
+      image_url: config.image_url || DEFAULT_IMAGE_URL,
       mower_entity: config.mower_entity,
       battery_entity: config.battery_entity || "",
       area_entity: config.area_entity || "",
@@ -204,7 +171,7 @@ class PastelLawnMowerCard extends LitElement {
 
         <div class="content-row">
           <div class="illustration" @click=${(e) => this._showMoreInfo(this.config.mower_entity, e)}>
-            ${unsafeHTML(mowerSvg(colors))}
+            <img src=${this.config.image_url} alt="" class="mower-image" />
           </div>
 
           <div class="stats">
@@ -306,6 +273,12 @@ class PastelLawnMowerCard extends LitElement {
         cursor: pointer;
         display: flex;
         align-items: center;
+        width: 140px;
+      }
+      .mower-image {
+        width: 100%;
+        height: auto;
+        display: block;
       }
       .stats {
         flex: 1;
@@ -404,12 +377,14 @@ class PastelLawnMowerCardEditor extends LitElement {
       { name: "title", selector: { text: {} } },
       { name: "subtitle", selector: { text: {} } },
       { name: "icon", selector: { icon: {} } },
+      { name: "image_url", selector: { text: {} } },
     ];
 
     const baseData = {
       title: this._config.title || "",
       subtitle: this._config.subtitle || "",
       icon: this._config.icon || "mdi:robot-mower",
+      image_url: this._config.image_url || "",
     };
 
     return html`
@@ -490,7 +465,7 @@ class PastelLawnMowerCardEditor extends LitElement {
   }
 
   _labelFor(name) {
-    const labels = { title: "Titolo", subtitle: "Sottotitolo", icon: "Icona" };
+    const labels = { title: "Titolo", subtitle: "Sottotitolo", icon: "Icona", image_url: "URL immagine (lascia vuoto per il disegno di default)" };
     return labels[name] || name;
   }
 
