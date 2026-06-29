@@ -54,7 +54,7 @@ function activityLabel(state) {
 // Default illustration shipped with this card (HACS asset, see README).
 // Configurable per-card via `image_url` for reuse with a different mower.
 // ----------------------------------------------------------------------------
-const DEFAULT_IMAGE_URL = "/hacsfiles/pastel-lawn-mower-card/lawn-mower-romario.png";
+const DEFAULT_IMAGE_URL = "/hacsfiles/Pastel-Lawn-Mower-Card/lawn-mower-romario.png";
 
 // ----------------------------------------------------------------------------
 // Card
