@@ -1,15 +1,12 @@
 [README.md](https://github.com/user-attachments/files/29451263/README.md)
 # Pastel Lawn Mower Card
 
-Custom Lovelace card per Home Assistant per il robot tagliaerba, con
-illustrazione **statica** (nessuna animazione, su richiesta esplicita) in
+Custom Lovelace card per Home Assistant per il robot tagliaerba, 
 stile pastello coerente con le altre card Pastel della stessa dashboard.
 
 ## Funzionalità
 
-- Illustrazione del robot tagliaerba fedele al design di riferimento (corpo
-  arrotondato, striscia luci, faccia amichevole, ruote), statica.
-- Badge di stato in alto, sempre nel colore di base scelto, basato sui **6
+, basato sui **6
   stati nativi e documentati dell'entità `lawn_mower` di Home Assistant**:
   `mowing` (In funzione), `docked` (Alla base), `paused` (In pausa),
   `returning` (Ritorno alla base), `error` (Errore), più
