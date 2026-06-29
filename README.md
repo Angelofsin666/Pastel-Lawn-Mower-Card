@@ -1,12 +1,15 @@
-[README.md](https://github.com/user-attachments/files/29451263/README.md)
 # Pastel Lawn Mower Card
 
-Custom Lovelace card per Home Assistant per il robot tagliaerba, 
+Custom Lovelace card per Home Assistant per il robot tagliaerba, con
+illustrazione **statica** (nessuna animazione, su richiesta esplicita) in
 stile pastello coerente con le altre card Pastel della stessa dashboard.
 
 ## Funzionalità
 
-, basato sui **6
+- Illustrazione del robot tagliaerba: immagine statica fornita con il
+  repository (`lawn-mower-romario.png`), fedele al disegno originale.
+  Nessuna animazione, su richiesta esplicita.
+- Badge di stato in alto, sempre nel colore di base scelto, basato sui **6
   stati nativi e documentati dell'entità `lawn_mower` di Home Assistant**:
   `mowing` (In funzione), `docked` (Alla base), `paused` (In pausa),
   `returning` (Ritorno alla base), `error` (Errore), più
@@ -32,11 +35,17 @@ stile pastello coerente con le altre card Pastel della stessa dashboard.
 3. Cerca "Pastel Lawn Mower Card" e installala
 
 ### Manuale
-1. Copia `pastel-lawn-mower-card.js` in `config/www/`
+1. Copia `pastel-lawn-mower-card.js` **e** `lawn-mower-romario.png` in
+   `config/www/pastel-lawn-mower-card/` (stessa cartella, l'immagine deve
+   stare vicino al file JS)
 2. Aggiungi la risorsa in **Impostazioni → Dashboard → Risorse**:
-   - URL: `/local/pastel-lawn-mower-card.js`
+   - URL: `/local/pastel-lawn-mower-card/pastel-lawn-mower-card.js`
    - Tipo: **JavaScript Module** (obbligatorio: il file usa `import`
      dinamici a livello principale)
+3. Se installi manualmente (non via HACS), aggiorna anche `image_url` nella
+   configurazione della card a `/local/pastel-lawn-mower-card/lawn-mower-romario.png`
+   (il default punta al percorso HACS `/hacsfiles/...`, che non esiste in
+   un'installazione manuale)
 
 ## Configurazione (YAML)
 
@@ -50,6 +59,14 @@ mower_entity: lawn_mower.romario
 battery_entity: sensor.romario_batteria
 area_entity: sensor.romario_area
 time_remaining_entity: sensor.romario_tempo_rimanente
+```
+
+`image_url` è opzionale: se omesso, la card usa l'immagine di default
+fornita con il repository. Per usare un disegno diverso (un altro robot, un
+altro colore di carrozzeria), basta indicare un URL diverso:
+
+```yaml
+image_url: /local/il-mio-tagliaerba-personalizzato.png
 ```
 
 Puoi anche configurarla interamente dall'editor visuale dalla dashboard:
@@ -74,8 +91,15 @@ stato + bottoni.
   assente, `null`, le stringhe `"unknown"`/`"unavailable"`, o un valore non
   numerico: in questi casi quel blocco specifico (batteria/area/tempo) non
   viene mostrato, senza generare errori.
-- Carica `lit-element`/`lit-html` da CDN per stabilità nel tempo (stesso
-  approccio delle altre card Pastel).
+- L'illustrazione è un'immagine statica (`lawn-mower-romario.png`)
+  distribuita nel repository HACS, servita automaticamente al percorso
+  `/hacsfiles/pastel-lawn-mower-card/lawn-mower-romario.png`. A differenza
+  delle altre card Pastel (che disegnano l'icona via SVG dinamico colorato
+  in base al tema), qui il colore di base influisce solo su badge, barra
+  batteria e bottoni — non sull'illustrazione stessa, che resta
+  un'immagine fissa indipendente dalla palette.
+- Carica `lit-element` da CDN per stabilità nel tempo (stesso approccio
+  delle altre card Pastel).
 - L'editor usa i componenti nativi `ha-entity-picker` di Home Assistant
   (stesso trade-off di stabilità descritto nelle altre card Pastel con
   editor avanzato).
