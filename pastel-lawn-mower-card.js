@@ -1,6 +1,3 @@
-import "https://cdn.jsdelivr.net/npm/lit-element@2.4.0/lit-element.js?module";
-
-const LitElement = customElements.get("lit-element") || Object.getPrototypeOf(customElements.get("ha-panel-lovelace") || class {});
 const { LitElement: LE, html, css } = await import("https://cdn.jsdelivr.net/npm/lit-element@2.4.0/lit-element.js?module");
 
 const COLORS = {
